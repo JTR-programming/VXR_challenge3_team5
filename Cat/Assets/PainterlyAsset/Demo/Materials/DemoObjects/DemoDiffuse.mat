@@ -154,6 +154,7 @@ Material:
     - _UseBlendingNoise: 1
     - _Variation: 0.1
     - _WorkflowMode: 1
+    - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.4728551, g: 0.54705286, b: 0.6226415, a: 1}
