@@ -4138,6 +4138,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9e1af8fc68fff594a8e25b17b9895618, type: 3}
   m_PrefabInstance: {fileID: 263471024}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &265779860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8806329115733545877, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+  m_PrefabInstance: {fileID: 1362640222}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &270016658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8432,6 +8437,7 @@ GameObject:
   - component: {fileID: 745368463}
   - component: {fileID: 745368465}
   - component: {fileID: 745368464}
+  - component: {fileID: 745368466}
   m_Layer: 0
   m_Name: hall Floor
   m_TagString: Untagged
@@ -8510,6 +8516,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745368462}
+  m_Mesh: {fileID: -629719859055844128, guid: a2b0dfbc76583c945aec777d758498d0, type: 3}
+--- !u!64 &745368466
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745368462}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: -629719859055844128, guid: a2b0dfbc76583c945aec777d758498d0, type: 3}
 --- !u!1001 &767544762
 PrefabInstance:
@@ -11715,6 +11743,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55430e238b7bb1b42b685a674ff555b2, type: 3}
+--- !u!4 &1012661651 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7917674758246323947, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+  m_PrefabInstance: {fileID: 1362640222}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1018155960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14534,15 +14567,27 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1362640226}
+    m_TransformParent: {fileID: 1012661651}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.36144
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       propertyPath: m_LocalPosition.z
@@ -14631,6 +14676,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       propertyPath: m_Name
       value: VRCharacterIK
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14896,14 +14945,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301508522}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.RigBuilder
   m_RigLayers:
   - m_Rig: {fileID: 1952607372}
-    m_Active: 1
+    m_Active: 0
   m_Effectors: []
 --- !u!114 &1301508524
 MonoBehaviour:
@@ -15758,6 +15807,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4295892835532738850, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Height
+      value: 1.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295892835532738850, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295892835532738850, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Center.y
+      value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295892835532738850, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_StepOffset
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4750419573833148750, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -15996,7 +16061,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7917674758326848202, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.493
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917674758326848202, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.555
       objectReference: {fileID: 0}
     - target: {fileID: 7917674758326848202, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16072,7 +16141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.121
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16159,10 +16228,13 @@ PrefabInstance:
     - {fileID: 5965901002940905721, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
     - {fileID: 2172320182217128489, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
-      insertIndex: 0
+    - targetCorrespondingSourceObject: {fileID: 7917674758246323947, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 1301508475}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8806329115733545877, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1362640236}
   m_SourcePrefab: {fileID: 100100000, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
 --- !u!4 &1362640223 stripped
 Transform:
@@ -16184,6 +16256,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8806329115733545878, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
   m_PrefabInstance: {fileID: 1362640222}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1362640236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265779860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff00315cc9b67949a2170f093741025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CatPawMovement
+  xrOrigin: {fileID: 1362640226}
+  headset: {fileID: 1362640225}
+  leftPaw: {fileID: 1362640224}
+  rightPaw: {fileID: 1362640223}
+  stepDistance: 0.25
+  movementSpeed: 1.5
+  forwardReach: 0.1
+  backwardDrag: 0.12
+  jumpHeight: 0.65
+  jumpLiftDistance: 0.14
+  jumpResetDistance: 0.06
+  jumpCooldown: 0.5
+  gravity: -9.81
+  stepOffset: 0.25
+  showDebugLogs: 1
 --- !u!1001 &1367880559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23989,57 +24088,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f76b38a89acf9134ea391ff11d86fe8e, type: 3}
---- !u!1 &2033215038
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2033215040}
-  - component: {fileID: 2033215039}
-  m_Layer: 0
-  m_Name: CatMovementManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2033215039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033215038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ff00315cc9b67949a2170f093741025, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CatPawMovement
-  xrOrigin: {fileID: 1362640226}
-  headset: {fileID: 1362640225}
-  leftPaw: {fileID: 1362640224}
-  rightPaw: {fileID: 1362640223}
-  stepDistance: 0.2
-  liftHeight: 0.12
-  landingHeight: 0.04
---- !u!4 &2033215040
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033215038}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2052142838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25153,7 +25201,6 @@ SceneRoots:
   - {fileID: 676836236}
   - {fileID: 1301626440}
   - {fileID: 827519295}
-  - {fileID: 2033215040}
   - {fileID: 1952286013}
   - {fileID: 1165891082}
   - {fileID: 1682386701}
