@@ -10,21 +10,27 @@ public class CatPawMovement : MonoBehaviour
     public Transform rightPaw;
 
     [Header("Walking")]
-    public float stepDistance = 0.25f;
+    public float stepDistance = 0.20f;
     public float movementSpeed = 1.5f;
-    public float forwardReach = 0.05f;
+
+    // NEW: Forward and backward walking gestures.
+    public float forwardReach = 0.08f;
     public float backwardDrag = 0.06f;
 
     [Header("Jumping")]
     public float jumpHeight = 0.65f;
-    public float jumpLiftDistance = 0.20f;
-    public float jumpResetDistance = 0.06f;
-    public float jumpCooldown = 0.5f;
-    public float jumpSyncWindow = 0.45f;
+    public float jumpLiftDistance = 0.16f;
+    public float jumpResetDistance = 0.08f;
+    public float jumpSyncWindow = 0.40f;
+    public float jumpCooldown = 0.50f;
 
-    [Header("Ground Movement")]
-    public float gravity = -9.81f;
+    [Header("Forward Lunge")]
+    public float lungeDistance = 0.85f;
+    public float lungeSpeed = 2.5f;
+
+    [Header("Carpet / Small Obstacles")]
     public float stepOffset = 0.25f;
+    public float slopeLimit = 60f;
 
     [Header("Debugging")]
     public bool showDebugLogs = true;
@@ -32,30 +38,48 @@ public class CatPawMovement : MonoBehaviour
 
     private CharacterController controller;
 
+    // WALKING STATE
     private class PawState
     {
+        public bool initialized = false;
+        public bool reachedForward = false;
+
         public Vector3 previousPosition;
 
-        public float restingHeight;
-        public bool raisedForJump;
-        public float raiseTime = -999f;
-
-        public bool reachedForward;
-        public float forwardDistance;
-        public float backwardDistance;
+        public float forwardMovement = 0f;
+        public float backwardMovement = 0f;
     }
 
     private PawState left = new PawState();
     private PawState right = new PawState();
 
+    // Right paw starts first.
     private bool rightPawTurn = true;
-    private bool jumpArmed = true;
-
-    private float lastJumpTime = -999f;
-    private float verticalVelocity = 0f;
-    private float nextDebugTime = 0f;
 
     private Vector3 remainingMovement;
+    private Vector3 remainingLunge;
+
+    private float verticalVelocity;
+    private const float gravity = -9.81f;
+
+    // ORIGINAL JUMPING STATE
+    private class JumpPawState
+    {
+        public bool initialized = false;
+        public bool raised = false;
+
+        public float lowestHeight;
+        public float peakHeight;
+        public float raiseTime;
+    }
+
+    private JumpPawState leftJump = new JumpPawState();
+    private JumpPawState rightJump = new JumpPawState();
+
+    private bool jumpLocked = false;
+    private float lastJumpTime = -999f;
+
+    private float nextTrackingLog = 0f;
 
     void Start()
     {
@@ -73,47 +97,116 @@ public class CatPawMovement : MonoBehaviour
         if (controller == null || !controller.enabled)
         {
             Debug.LogError(
-                "XR Origin requires an enabled CharacterController!"
+                "XR Origin needs an enabled CharacterController!"
             );
 
             enabled = false;
             return;
         }
 
-        controller.stepOffset = Mathf.Min(
+        // Keep the carpet traversal settings.
+        controller.stepOffset = Mathf.Clamp(
             stepOffset,
-            controller.height
+            0f,
+            Mathf.Max(0f, controller.height - 0.01f)
         );
 
-        controller.slopeLimit = 60f;
+        controller.slopeLimit = slopeLimit;
 
-        InitializePaw(leftPaw, left);
-        InitializePaw(rightPaw, right);
+        // Initialize walking positions.
+        InitializeWalkingPaw(leftPaw, left);
+        InitializeWalkingPaw(rightPaw, right);
 
-        if (showDebugLogs)
+        Debug.Log(
+            "CAT MOVEMENT READY - RIGHT PAW FIRST"
+        );
+    }
+
+    void Update()
+    {
+        // Check for jumping first.
+        bool startedJump = CheckJump();
+
+        // Always update both controller positions.
+        // This prevents outdated movement values.
+        Vector3 rightPosition =
+            GetLocalPosition(rightPaw);
+
+        Vector3 leftPosition =
+            GetLocalPosition(leftPaw);
+
+        Vector3 rightDelta =
+            rightPosition - right.previousPosition;
+
+        Vector3 leftDelta =
+            leftPosition - left.previousPosition;
+
+        // Walking is only paused during jumping.
+        if (!jumpLocked && !startedJump)
+        {
+            if (rightPawTurn)
+            {
+                CheckPaw(
+                    rightDelta,
+                    right,
+                    true
+                );
+            }
+            else
+            {
+                CheckPaw(
+                    leftDelta,
+                    left,
+                    false
+                );
+            }
+        }
+
+        // Save positions for the next frame.
+        right.previousPosition = rightPosition;
+        left.previousPosition = leftPosition;
+
+        // Optional movement diagnostics.
+        if (showTrackingLogs &&
+            Time.time >= nextTrackingLog)
         {
             Debug.Log(
-                "CAT MOVEMENT READY - RIGHT PAW FIRST"
+                $"RIGHT: {rightPosition} | " +
+                $"LEFT: {leftPosition} | " +
+                $"GROUNDED: {controller.isGrounded} | " +
+                $"NEXT: {(rightPawTurn ? "RIGHT" : "LEFT")}"
             );
+
+            nextTrackingLog = Time.time + 0.5f;
         }
+
+        // Keep original movement physics.
+        ApplyMovement();
     }
 
-    void InitializePaw(Transform paw, PawState state)
+    // NEW: Initialize paw position.
+    void InitializeWalkingPaw(
+        Transform paw,
+        PawState state)
     {
-        Vector3 position = GetLocalPosition(paw);
+        state.previousPosition =
+            GetLocalPosition(paw);
 
-        state.previousPosition = position;
-        state.restingHeight = position.y;
+        state.initialized = true;
 
-        ResetGesture(state);
+        ResetWalkingGesture(state);
     }
 
+    // Get position relative to XR Origin.
     Vector3 GetLocalPosition(Transform paw)
     {
-        // Removes XR Origin translation from paw tracking.
-        return xrOrigin.InverseTransformPoint(paw.position);
+        return xrOrigin.InverseTransformPoint(
+            paw.position
+        );
     }
 
+    // Get horizontal facing direction
+    // relative to XR Origin.
     Vector3 GetLocalForward()
     {
         Vector3 forward =
@@ -129,92 +222,33 @@ public class CatPawMovement : MonoBehaviour
         return forward.normalized;
     }
 
-    void Update()
+    // NEW WALKING GESTURE DETECTION
+    void CheckPaw(
+        Vector3 movementDelta,
+        PawState state,
+        bool isRightPaw)
     {
-        // Read controller positions every frame.
-        Vector3 leftPosition =
-            GetLocalPosition(leftPaw);
-
-        Vector3 rightPosition =
-            GetLocalPosition(rightPaw);
-
         Vector3 forward = GetLocalForward();
 
-        // Controller motion since the previous frame.
-        Vector3 leftDelta =
-            leftPosition - left.previousPosition;
-
-        Vector3 rightDelta =
-            rightPosition - right.previousPosition;
-
-        // Detect vertical movement for jumping.
-        UpdateJumpPaw(leftPosition, left);
-        UpdateJumpPaw(rightPosition, right);
-
-        bool jumped = CheckJump();
-
-        // Walking gestures should not be counted
-        // while airborne or triggering a jump.
-        if (!jumped && controller.isGrounded)
-        {
-            if (rightPawTurn)
-            {
-                CheckPawDrag(rightDelta, right, true, forward);
-            }
-            else
-            {
-                CheckPawDrag(leftDelta, left, false, forward);
-            }
-        }
-
-        // Optional tracking diagnostics.
-        if (showTrackingLogs &&
-            Time.time >= nextDebugTime)
-        {
-            Debug.Log(
-                $"Right local: {rightPosition} | " +
-                $"Left local: {leftPosition} | " +
-                $"Grounded: {controller.isGrounded} | " +
-                $"Next: {(rightPawTurn ? "RIGHT" : "LEFT")}"
-            );
-
-            nextDebugTime = Time.time + 0.5f;
-        }
-
-        // Save positions for the next frame.
-        left.previousPosition = leftPosition;
-        right.previousPosition = rightPosition;
-
-        ApplyMovement();
-    }
-
-    void CheckPawDrag(
-        Vector3 delta,
-        PawState state,
-        bool isRightPaw,
-        Vector3 forward)
-    {
-        // Project controller motion onto the
-        // direction the player is facing.
+        // Determine whether the controller
+        // moved forward or backward.
         float movement = Vector3.Dot(
-            delta,
+            movementDelta,
             forward
         );
 
-        // PHASE 1: Move controller forward.
+        // PHASE 1: Move paw forward.
         if (!state.reachedForward)
         {
-            // Accumulate forward movement.
-            // Backward motion resets the reach progress.
-            state.forwardDistance = Mathf.Max(
+            state.forwardMovement = Mathf.Max(
                 0f,
-                state.forwardDistance + movement
+                state.forwardMovement + movement
             );
 
-            if (state.forwardDistance >= forwardReach)
+            if (state.forwardMovement >= forwardReach)
             {
                 state.reachedForward = true;
-                state.backwardDistance = 0f;
+                state.backwardMovement = 0f;
 
                 if (showDebugLogs)
                 {
@@ -229,26 +263,28 @@ public class CatPawMovement : MonoBehaviour
             return;
         }
 
-        // PHASE 2: Drag controller backward.
-        if (movement < 0f)
-        {
-            state.backwardDistance += -movement;
-        }
-        else
-        {
-            // Forward motion reduces accumulated drag.
-            state.backwardDistance = Mathf.Max(
-                0f,
-                state.backwardDistance - movement
-            );
-        }
+        // PHASE 2: Move paw backward.
+        state.backwardMovement = Mathf.Max(
+            0f,
+            state.backwardMovement - movement
+        );
 
-        if (state.backwardDistance >= backwardDrag)
+        if (state.backwardMovement >= backwardDrag)
         {
+            ResetWalkingGesture(state);
+
             CompleteStep(isRightPaw);
         }
     }
 
+    void ResetWalkingGesture(PawState state)
+    {
+        state.reachedForward = false;
+        state.forwardMovement = 0f;
+        state.backwardMovement = 0f;
+    }
+
+    // ORIGINAL SMOOTH STEP MECHANISM
     void CompleteStep(bool isRightPaw)
     {
         Vector3 direction = headset.forward;
@@ -259,17 +295,16 @@ public class CatPawMovement : MonoBehaviour
 
         direction.Normalize();
 
-        // Queue a short forward step.
+        // Queue one smooth forward step.
         remainingMovement +=
             direction * stepDistance;
 
-        // Alternate between right and left.
+        // Alternate paws.
         rightPawTurn = !isRightPaw;
 
-        // Clear the completed gesture and
-        // prepare the opposite paw.
-        ResetGesture(left);
-        ResetGesture(right);
+        // Reset both gesture states.
+        ResetWalkingGesture(left);
+        ResetWalkingGesture(right);
 
         if (showDebugLogs)
         {
@@ -281,128 +316,189 @@ public class CatPawMovement : MonoBehaviour
         }
     }
 
-    void ResetGesture(PawState state)
-    {
-        state.reachedForward = false;
-        state.forwardDistance = 0f;
-        state.backwardDistance = 0f;
-    }
-
+    // ORIGINAL JUMP DETECTION
     void UpdateJumpPaw(
-        Vector3 position,
-        PawState state)
+        Transform paw,
+        JumpPawState state)
     {
-        float height = position.y;
+        float height =
+            xrOrigin.InverseTransformPoint(
+                paw.position
+            ).y;
 
-        // Keep track of the lowest controller height.
-        if (height < state.restingHeight)
+        if (!state.initialized)
         {
-            state.restingHeight = height;
+            state.lowestHeight = height;
+            state.peakHeight = height;
+            state.initialized = true;
+            return;
         }
 
-        float lift =
-            height - state.restingHeight;
-
-        if (!state.raisedForJump &&
-            lift >= jumpLiftDistance)
+        if (!state.raised)
         {
-            state.raisedForJump = true;
-            state.raiseTime = Time.time;
+            state.lowestHeight = Mathf.Min(
+                state.lowestHeight,
+                height
+            );
 
-            if (showDebugLogs)
-                Debug.Log("PAW RAISED FOR JUMP");
+            float lift =
+                height - state.lowestHeight;
+
+            if (lift >= jumpLiftDistance)
+            {
+                state.raised = true;
+                state.peakHeight = height;
+                state.raiseTime = Time.time;
+            }
         }
-
-        if (state.raisedForJump &&
-            lift <= jumpResetDistance)
+        else
         {
-            state.raisedForJump = false;
-            state.raiseTime = -999f;
+            state.peakHeight = Mathf.Max(
+                state.peakHeight,
+                height
+            );
+
+            float drop =
+                state.peakHeight - height;
+
+            if (drop >= jumpResetDistance)
+            {
+                state.raised = false;
+                state.lowestHeight = height;
+                state.peakHeight = height;
+            }
         }
     }
 
+    // ORIGINAL TWO-PAW JUMP
     bool CheckJump()
     {
-        // Both hands must return down
-        // to rearm the next jump.
-        if (!left.raisedForJump &&
-            !right.raisedForJump)
+        UpdateJumpPaw(leftPaw, leftJump);
+        UpdateJumpPaw(rightPaw, rightJump);
+
+        // Resume walking after landing
+        // and lowering both paws.
+        if (jumpLocked)
         {
-            jumpArmed = true;
+            if (controller.isGrounded &&
+                verticalVelocity <= 0f &&
+                !leftJump.raised &&
+                !rightJump.raised)
+            {
+                jumpLocked = false;
+
+                ResetWalkingGesture(left);
+                ResetWalkingGesture(right);
+
+                if (showDebugLogs)
+                {
+                    Debug.Log("CAT READY TO WALK");
+                }
+            }
+
+            return false;
         }
 
-        if (!jumpArmed)
+        if (!leftJump.raised || !rightJump.raised)
             return false;
 
-        if (!controller.isGrounded)
-            return false;
-
-        if (!left.raisedForJump ||
-            !right.raisedForJump)
-            return false;
-
-        // Require both paws to be lifted
-        // within a short time of one another.
         float timeDifference = Mathf.Abs(
-            left.raiseTime - right.raiseTime
+            leftJump.raiseTime - rightJump.raiseTime
         );
 
         if (timeDifference > jumpSyncWindow)
             return false;
 
+        if (!controller.isGrounded)
+            return false;
+
         if (Time.time - lastJumpTime < jumpCooldown)
             return false;
 
-        // Jump velocity from desired jump height.
+        PerformJump();
+        return true;
+    }
+
+    // ORIGINAL UPWARD JUMP + FORWARD LUNGE
+    void PerformJump()
+    {
         verticalVelocity = Mathf.Sqrt(
             jumpHeight * -2f * gravity
         );
 
+        Vector3 direction = headset.forward;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            direction.Normalize();
+
+            remainingLunge =
+                direction * lungeDistance;
+        }
+        else
+        {
+            remainingLunge = Vector3.zero;
+        }
+
         lastJumpTime = Time.time;
-        jumpArmed = false;
+        jumpLocked = true;
 
-        // Prevent walking gestures from completing
-        // during the jump.
-        ResetGesture(left);
-        ResetGesture(right);
-
+        // Stop unfinished walking.
         remainingMovement = Vector3.zero;
+
+        ResetWalkingGesture(left);
+        ResetWalkingGesture(right);
 
         if (showDebugLogs)
         {
-            Debug.Log("BOTH PAWS UP - CAT JUMP!");
+            Debug.Log(
+                "BOTH PAWS UP - CAT LUNGE!"
+            );
         }
-
-        return true;
     }
 
+    // ORIGINAL MOVEMENT PHYSICS
     void ApplyMovement()
     {
-        if (controller == null || !controller.enabled)
+        if (controller == null ||
+            !controller.enabled)
             return;
 
-        // Smoothly consume queued walking distance.
-        Vector3 stepMovement = Vector3.MoveTowards(
-            Vector3.zero,
-            remainingMovement,
-            movementSpeed * Time.deltaTime
-        );
+        // Smooth walking.
+        Vector3 stepMovement =
+            Vector3.MoveTowards(
+                Vector3.zero,
+                remainingMovement,
+                movementSpeed * Time.deltaTime
+            );
 
         remainingMovement -= stepMovement;
 
-        // Reset falling velocity on the ground.
+        // Forward lunge.
+        Vector3 lungeMovement =
+            Vector3.MoveTowards(
+                Vector3.zero,
+                remainingLunge,
+                lungeSpeed * Time.deltaTime
+            );
+
+        remainingLunge -= lungeMovement;
+
+        // Grounding.
         if (controller.isGrounded &&
             verticalVelocity < 0f)
         {
             verticalVelocity = -2f;
         }
 
-        // Apply gravity every frame.
         verticalVelocity +=
             gravity * Time.deltaTime;
 
+        // Combine walking, jumping, lunging.
         Vector3 movement =
             stepMovement +
+            lungeMovement +
             Vector3.up *
             verticalVelocity *
             Time.deltaTime;
@@ -410,11 +506,25 @@ public class CatPawMovement : MonoBehaviour
         CollisionFlags flags =
             controller.Move(movement);
 
-        // Stop upward motion if we hit a ceiling.
+        // Stop upward motion at ceiling.
         if ((flags & CollisionFlags.Above) != 0 &&
             verticalVelocity > 0f)
         {
             verticalVelocity = 0f;
+        }
+
+        // Stop lunge after landing.
+        if ((flags & CollisionFlags.Below) != 0 &&
+            verticalVelocity < 0f &&
+            jumpLocked)
+        {
+            remainingLunge = Vector3.zero;
+        }
+
+        // Stop lunge when hitting a wall.
+        if ((flags & CollisionFlags.Sides) != 0)
+        {
+            remainingLunge = Vector3.zero;
         }
     }
 }

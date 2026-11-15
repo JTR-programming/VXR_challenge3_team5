@@ -20577,7 +20577,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265779860}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ff00315cc9b67949a2170f093741025, type: 3}
   m_Name: 
@@ -20586,19 +20586,21 @@ MonoBehaviour:
   headset: {fileID: 1362640225}
   leftPaw: {fileID: 1362640224}
   rightPaw: {fileID: 1362640223}
-  stepDistance: 0.25
+  stepDistance: 0.4
   movementSpeed: 1.5
-  forwardReach: 0.05
+  forwardReach: 0.08
   backwardDrag: 0.06
-  jumpHeight: 0.65
-  jumpLiftDistance: 0.2
-  jumpResetDistance: 0.06
+  jumpHeight: 0.8
+  jumpLiftDistance: 0.16
+  jumpResetDistance: 0.08
+  jumpSyncWindow: 0.4
   jumpCooldown: 0.5
-  jumpSyncWindow: 0.45
-  gravity: -9.81
+  lungeDistance: 0.85
+  lungeSpeed: 2.5
   stepOffset: 0.25
+  slopeLimit: 60
   showDebugLogs: 1
-  showTrackingLogs: 1
+  showTrackingLogs: 0
 --- !u!114 &1362640242
 MonoBehaviour:
   m_ObjectHideFlags: 0
