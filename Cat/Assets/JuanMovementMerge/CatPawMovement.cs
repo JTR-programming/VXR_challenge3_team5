@@ -91,8 +91,7 @@ public class CatPawMovement : MonoBehaviour
             return;
         }
 
-        controller =
-            xrOrigin.GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
 
         if (controller == null || !controller.enabled)
         {
