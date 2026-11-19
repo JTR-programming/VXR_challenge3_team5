@@ -5431,7 +5431,7 @@ MonoBehaviour:
   source: {fileID: 611579936}
   reference: {fileID: 1786832638}
   positionScale: 0.2
-  positionOffset: {x: 0, y: 0.2, z: 0.15}
+  positionOffset: {x: 0.02, y: 0.2, z: 0.15}
   rotationOffset: {x: -220, y: 0, z: 0}
 --- !u!65 &289049836
 BoxCollider:
@@ -17007,7 +17007,7 @@ MonoBehaviour:
   source: {fileID: 1564451320}
   reference: {fileID: 1786832638}
   positionScale: 0.2
-  positionOffset: {x: 0, y: 0.2, z: 0.15}
+  positionOffset: {x: -0.02, y: 0.2, z: 0.15}
   rotationOffset: {x: -220, y: 0, z: 0}
 --- !u!1001 &1165891082
 PrefabInstance:
@@ -19694,7 +19694,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.05
+  near clip plane: 0.02
   far clip plane: 1000
   field of view: 80
   orthographic: 0
@@ -25547,6 +25547,37 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!1 &1693999908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1693999909}
+  m_Layer: 0
+  m_Name: WorldScale
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1693999909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693999908}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1695646087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28059,6 +28090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1891781659}
   - component: {fileID: 1891781660}
+  - component: {fileID: 1891781661}
   m_Layer: 0
   m_Name: LeftFrontIK
   m_TagString: Untagged
@@ -28090,7 +28122,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891781658}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
   m_Name: 
@@ -28107,6 +28139,29 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
+--- !u!114 &1891781661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891781658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e4fc34d6f32731d2bd97bd9957be67c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeightedCcdIK
+  joints:
+  - {fileID: 1974666668}
+  - {fileID: 1974666670}
+  endBone: {fileID: 1974666672}
+  target: {fileID: 1161481677}
+  hint: {fileID: 1282822789}
+  weights:
+  - 0.7
+  - 0.382
+  iterations: 13
+  tolerance: 0.01
 --- !u!1 &1899461906 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2078950744382008868, guid: a2b0dfbc76583c945aec777d758498d0, type: 3}
@@ -30951,6 +31006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2103371057}
   - component: {fileID: 2103371058}
+  - component: {fileID: 2103371059}
   m_Layer: 0
   m_Name: RightFrontIK
   m_TagString: Untagged
@@ -30982,7 +31038,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103371056}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aeda7bfbf984f2a4da5ab4b8967b115d, type: 3}
   m_Name: 
@@ -30999,6 +31055,29 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
+--- !u!114 &2103371059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103371056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e4fc34d6f32731d2bd97bd9957be67c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeightedCcdIK
+  joints:
+  - {fileID: 1974666661}
+  - {fileID: 1974666663}
+  endBone: {fileID: 1974666665}
+  target: {fileID: 277192416}
+  hint: {fileID: 54687151}
+  weights:
+  - 0.7
+  - 0.382
+  iterations: 13
+  tolerance: 0.01
 --- !u!1001 &2108660288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31961,3 +32040,4 @@ SceneRoots:
   - {fileID: 1748299869}
   - {fileID: 928285483}
   - {fileID: 2019336021}
+  - {fileID: 1693999909}
