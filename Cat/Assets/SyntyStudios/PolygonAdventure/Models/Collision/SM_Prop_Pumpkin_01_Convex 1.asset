@@ -7,7 +7,7 @@ Mesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SM_Prop_Pumpkin_01_Convex 1
-  serializedVersion: 10
+  serializedVersion: 12
   m_SubMeshes:
   - serializedVersion: 2
     firstByte: 0
@@ -32,10 +32,10 @@ Mesh:
     m_Data: 
   m_MeshCompression: 0
   m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
+  m_KeepVertices: 0
+  m_KeepIndices: 0
   m_IndexFormat: 0
-  m_IndexBuffer: 0a0007000f00040003000800010002000900060001000900060009000a00000006000a00050007000a00090005000a00020001000b00030004000b000b0004000c00040007000c00070005000c00090002000c00050009000c0002000b000c00060000000d00000008000d00080003000d00010006000e000b0001000e0003000b000e0006000d000e000d0003000e00070004000f00080000000f00040008000f0000000a000f00
+  m_IndexBuffer: 0a0007000f00040003000800010002000900060001000900060009000a00000006000a00050007000a00090005000a00020001000b00030004000b000b0004000c00040007000c00070005000c00090002000c00050009000c0002000b000c00060000000d00000008000d00080003000d00010006000e000b0001000e0003000b000e0006000d000e000d0003000e00070004000f00080000000f00040008000f0000000a000f00y
   m_VertexData:
     serializedVersion: 3
     m_VertexCount: 16
@@ -153,14 +153,29 @@ Mesh:
   m_LocalAABB:
     m_Center: {x: 0.0100455955, y: 0.1613346, z: 0.003715396}
     m_Extent: {x: 0.19812453, y: 0.15856335, z: 0.21391587}
-  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_PreBakeConvexCollisionMesh: 1
+  m_PreBakeTriangleCollisionMesh: 0
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
   m_MeshOptimizationFlags: -1
   m_StreamData:
     serializedVersion: 2
     offset: 0
     size: 0
     path: 
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0

@@ -8425,7 +8425,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.10000004, y: 0.10000001, z: 0.100000046}
+  m_LocalScale: {x: 0.10000004, y: 0.100000046, z: 0.10000008}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1786832638}
@@ -18115,6 +18115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1242612293}
   - component: {fileID: 1242612292}
+  - component: {fileID: 1242612294}
   m_Layer: 0
   m_Name: VRIKRig
   m_TagString: Untagged
@@ -18396,6 +18397,19 @@ Transform:
   - {fileID: 938675287}
   m_Father: {fileID: 1974666690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1242612294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242612291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97e8bd45e5bef14ba99137f01c7ad75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::copyRotation
+  cameraTransform: {fileID: 1359503300}
 --- !u!1001 &1252228824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21634,6 +21648,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8435766244919394244, guid: 7a059b24359c27c4698e671cdab60bc6, type: 3}
   m_PrefabInstance: {fileID: 1447392727}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1453740762 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -5151492872390713093, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+  m_PrefabInstance: {fileID: 1974666642}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1453740764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453740762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97e8bd45e5bef14ba99137f01c7ad75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::copyRotation
+  cameraTransform: {fileID: 1359503300}
 --- !u!1001 &1457590908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26960,8 +26992,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1014645324}
-  - {fileID: 611579936}
   - {fileID: 1564451320}
+  - {fileID: 611579936}
   m_Father: {fileID: 1974666690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1786832639
@@ -29405,6 +29437,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1974666695}
+    - targetCorrespondingSourceObject: {fileID: -5151492872390713093, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1453740764}
     - targetCorrespondingSourceObject: {fileID: 3274310126969801450, guid: cb28bef4361699aeebfca1aca8c63919, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1200039146}
